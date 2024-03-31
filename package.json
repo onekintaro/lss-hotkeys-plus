@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": ""
+    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack --config webpack.dev.js",
+    "deploy-dev": "webpack --config webpack.dev.js && git add ./dist-dev && git commit -m \"Deploying dev build\" && git push"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,14 @@
   "bugs": {
     "url": "https://github.com/onekintaro/lss-hotkeys-plus/issues"
   },
-  "homepage": "https://github.com/onekintaro/lss-hotkeys-plus#readme"
+  "homepage": "https://github.com/onekintaro/lss-hotkeys-plus#readme",
+  "devDependencies": {
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4",
+    "webpack-merge": "^5.10.0"
+  },
+  "dependencies": {
+    "hotkeys-js": "^3.13.7"
+  }
 }
