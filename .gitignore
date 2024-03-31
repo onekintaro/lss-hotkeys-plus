@@ -89,7 +89,7 @@ out
 
 # Nuxt.js build / generate output
 .nuxt
-dist
+
 
 # Gatsby files
 .cache/
@@ -131,3 +131,4 @@ dist
 
 .history
 .vscode
+package-lock.json
