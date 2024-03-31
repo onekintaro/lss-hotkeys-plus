@@ -1,0 +1,1 @@
+(()=>{"use strict";window.location.href.includes("/aaos")?console.log("Auf der AAO-Seite"):new URL(window.location.href).pathname.startsWith("/missions")&&console.log("Auf einer Missions-Seite"),window.addEventListener("load",(()=>{}))})();
