@@ -74,6 +74,12 @@
     max-width: fit-content;
 }
 
+.toastify-actions {
+    display: flex;
+    align-items: right;
+    justify-content: space-between;
+}
+
 @media only screen and (max-width: 360px) {
     .toastify-right, .toastify-left {
         margin-left: auto;
