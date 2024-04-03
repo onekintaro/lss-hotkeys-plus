@@ -76,8 +76,9 @@
 
 .toastify-actions {
     display: flex;
-    align-items: right;
-    justify-content: space-between;
+    align-items: end;
+    justify-content: end;
+    gap: .5rem;
 }
 
 @media only screen and (max-width: 360px) {
