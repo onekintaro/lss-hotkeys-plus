@@ -1,12 +1,17 @@
-import {
-  errorToast,
-  getHotkey,
-  addHotkey,
-  deleteHotkey,
-  loadSetting,
-} from "@core/hotkeyCore";
-import ModalElements from "./modalElements";
-import { updateAllConfigButtons } from "@aaos/hotkeyMenu";
+// import {
+//   errorToast,
+//   getHotkey,
+//   addHotkey,
+//   deleteHotkey,
+//   loadSetting,
+// } from "@core/hotkeyCore";
+
+import Core from "@core/core";
+import HotkeyCore from "@core/hotkey";
+import Toast from "@core/toasts";
+import Settings from "@core/settings";
+
+import HotkeyModalLayout from "./modalLayout";
 
 // Spezielle Tastennamen anpassen
 const specialKeys = {
@@ -29,15 +34,20 @@ const specialKeys = {
   Delete: "delete",
 };
 
-class ModalCore extends ModalElements {
+class HotkeyModalCore extends HotkeyModalLayout {
   constructor(aaoId, name) {
     super(); // Ruft den Konstruktor der Basisklasse auf
     this.aaoId = aaoId;
     this.name = name;
+
+    this.hotkeyCore = new HotkeyCore();
+    this.toast = new Toast();
+    this.settings = new Settings();
+
     this.setupModal();
   }
 
-  updateModal(hotkey = getHotkey(this.aaoId)) {
+  updateModal(hotkey = this.hotkeyCore.getHotkey(this.aaoId)) {
 
     // Actual Hotkey Text
     if (hotkey) {
@@ -52,20 +62,20 @@ class ModalCore extends ModalElements {
   saveHotkey() {
     const hotkey = this.input.value;
     if (!hotkey) {
-      errorToast("Bitte gib einen Hotkey ein.");
+      this.toast.error("Bitte gib einen Hotkey ein.");
       return false;
     }
-    const add = addHotkey(this.aaoId, this.name, this.input.value);
+    const add = this.hotkeyCore.addHotkey(this.aaoId, this.name, this.input.value);
     if (add) {
       this.updateModal();
-      updateAllConfigButtons(loadSetting("showHotkeys"));
+      this.core.updateAAOConfigButtons(this.settings.loadSetting("showHotkeys"));
       return true;
     }
   }
 
   setupModal() {
     //get Hotkey
-    const hotkey = getHotkey(this.aaoId);
+    const hotkey = this.hotkeyCore.getHotkey(this.aaoId);
 
     // Modal Title Text
     this.title.textContent = `Hotkey für: ${this.name}`;
@@ -80,10 +90,10 @@ class ModalCore extends ModalElements {
     }
     // Event-Handler für Löschen-Button
     this.buttons.delete.addEventListener("click", () => {
-      deleteHotkey(this.aaoId, (success) => {
+      this.hotkeyCore.deleteHotkey(this.aaoId, (success) => {
           if(success) {
               this.updateModal();
-              updateAllConfigButtons();
+              this.core.updateAAOConfigButtons();
           }
           // Optional: Füge hier den Code ein, um das Modal zu schließen, falls nötig
       });
@@ -167,4 +177,4 @@ class ModalCore extends ModalElements {
   }
 }
 
-export default ModalCore;
+export default HotkeyModalCore;

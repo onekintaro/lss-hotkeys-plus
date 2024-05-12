@@ -1,0 +1,9 @@
+span.hotkeyBtn {
+    display: inline-block;
+    padding: 0 2px;
+    margin: 1px 1px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: #333;
+}

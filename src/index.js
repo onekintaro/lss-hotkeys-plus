@@ -1,8 +1,12 @@
-import { isAaoPage, isAaoEditPage, isMissionsPage } from '@core/urlCheck';
-import { placeEditButton } from '@aaos/editBtn';
-import { warnDefault } from '@aaosEdit/warnDefault';
-import { placeShowButton } from '@aaos/hotkeyMenu';
+import { loader } from '@core/loader';
+import UrlCheck from '@core/urlCheck';
+import { debugLog, debugInfo } from '@core/debugger';
+import { addMenuEntry } from '@main/menu';
 import { ToastifyCSS } from '@config';
+import { HotkeyCSS } from '@config';
+import pkg from '@package';
+
+const urlCheck = new UrlCheck();
 
 function loadToastifyCSS() {
     const link = document.createElement("link");
@@ -12,21 +16,24 @@ function loadToastifyCSS() {
     document.head.appendChild(link);
 }
 
-window.addEventListener('load', () => {
-    if (isAaoPage()) {
-        // Code für die AAO-Seite
-        console.log('Auf der AAO-Seite');
-        loadToastifyCSS();
-        placeShowButton();
-        placeEditButton();
-    } else if (isAaoEditPage()) {
-        // Code für die AAO-Bearbeiten-Seite
-        console.log('Auf einer AAO-Bearbeiten-Seite');
-        warnDefault();
-    } else if (isMissionsPage()) {
-        // Code für die Missions-Seite
-        console.log('Auf einer Missions-Seite');
-        loadToastifyCSS();
-    }
+function loadHotkeyCSS() {
+    const link = document.createElement("link");
+    link.href = HotkeyCSS;
+    link.type = "text/css";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+}
 
+window.addEventListener('load', () => {
+    debugLog("%cHotkeys Plus v"+pkg.version+" wurde geladen, Debug Modus ist aktiviert.", "color:magenta")
+    debugLog("%cDebug Info:", "color:magenta", debugInfo());
+    loadToastifyCSS();
+    loadHotkeyCSS();
+    //add menu entry
+    addMenuEntry();
+    if (!urlCheck.initSelf()) {
+        debugLog("Keine passende Seite gefunden.");
+        debugLog("Verwende den MutationObserver.");
+        loader();
+    }
 });

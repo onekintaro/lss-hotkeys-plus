@@ -1,10 +1,12 @@
 import SVG_deleteInput from "@assets/svg/hotkeyDeleteInput.svg";
 import SVG_deleteIcon from "@assets/svg/hotkeyDelete.svg";
-import { updateAllConfigButtons } from "@aaos/hotkeyMenu";
+import Core from "@core/core";
 
-class ModalElements {
+class HotkeyModalLayout {
 
   constructor() {
+    this.core = new Core();
+
     // Initialisiere das Modal beim Erstellen einer neuen Instanz
     this.modalBuilder();
   }
@@ -165,9 +167,9 @@ class ModalElements {
     this.container.classList.remove("in");
     this.container.style.display = "none";
     this.container.remove();
-    updateAllConfigButtons();
+    this.core.updateAAOConfigButtons();
   }
 
 }
 
-export default ModalElements;
+export default HotkeyModalLayout;

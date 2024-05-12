@@ -1,11 +1,26 @@
-import { loadSetting, toggleSetting, getHotkey } from "@core/hotkeyCore";
-import SVG_hotkey_icon from "@assets/svg/hotkeyIcon.svg";
+import Core from "@core/core";
+import { debugLog } from "@core/debugger";
+import { debugState } from "@core/debugger";
+import SettingsModalCore from "@core/settingsModal/modalCore";
 
-export function placeShowButton() {
-    const aaoRegion = document.querySelector('#mission-aao-group');
+const core = new Core();
+const debugMessage = debugState();
+
+function settingsButton() {
+    const settingsButton = document.createElement('button');
+    settingsButton.classList.add('btn', 'btn-xs', 'btn-info');
+    settingsButton.innerHTML = 'Hotkey+ Settings';
+    settingsButton.addEventListener('click', () => {
+        const modal = new SettingsModalCore();
+        modal.open();
+    });
+    return settingsButton;
+}
+
+function showButton() {
     const showButton = document.createElement('button');
     showButton.classList.add('btn', 'btn-xs');
-    let state = loadSetting('showHotkeys');
+    let state = core.loadSetting('showHotkeysAAO', debugMessage);
 
     // Setze den initialen Button-Text basierend auf dem aktuellen Zustand
     if (state) {
@@ -18,7 +33,7 @@ export function placeShowButton() {
 
     showButton.addEventListener('click', () => {
         // Umschalten des Zustands
-        state = toggleSetting('showHotkeys');
+        state = core.toggleSetting('showHotkeysAAO', debugMessage);
         // Button-Text basierend auf dem neuen Zustand aktualisieren
         if (state) {
             showButton.innerHTML = 'Hotkeys verstecken';
@@ -29,33 +44,30 @@ export function placeShowButton() {
             showButton.classList.remove('btn-danger');
             showButton.classList.add('btn-success');
         }
-        console.log('State:', state);
-        updateAllConfigButtons(state);
+        debugLog('State:', state);
+        core.updateAAOConfigButtons(state);
     });
-
-    aaoRegion.appendChild(showButton);
+    return showButton;
 }
 
-export function updateAllConfigButtons(state = loadSetting("showHotkeys")) {
-    const configButtons = document.querySelectorAll('.hotkeyConfigButton');
-    configButtons.forEach(button => {
-        const aaoId = button.getAttribute('data-aao-id');
-        let hotkey = getHotkey(aaoId);
-        const svgHtml = SVG_hotkey_icon;
-        if (!hotkey) {
-            hotkey = 'none';
-        }
 
-        if (state) {
-            button.innerHTML = `${svgHtml} [${hotkey}]`;
-        } else {
-            button.innerHTML = svgHtml;
-        }
+export function placeButtonGroup() {
+    const aaoRegion = document.querySelector('#mission-aao-group');
+    debugLog('aaoRegion:', aaoRegion);
 
-        const svgElement = button.querySelector('svg');
-        svgElement.style.width = '12px';
-        svgElement.style.height = '12px';
-        svgElement.style.fill = 'currentColor';
-    });
+    const showBtn = showButton();
+    const settingsBtn = settingsButton();
+
+    const buttonGroup = document.createElement('div');
+    buttonGroup.classList.add('btn-group');
+
+    buttonGroup.appendChild(showBtn);
+    buttonGroup.appendChild(settingsBtn);
+    
+    if (aaoRegion) {
+        aaoRegion.appendChild(buttonGroup);
+    }
 }
+
+
 

@@ -1,6 +1,8 @@
 import SVG_hotkey_icon from "@assets/svg/hotkeyIcon.svg";
-import ModalCore from "@core/modal/modalCore";
-import { getHotkey, loadSetting } from "@core/hotkeyCore";
+import HotkeyModalCore from "@core/hotkeyModal/modalCore";
+import Core from "@core/core";
+
+const core = new Core();
 
 export function placeEditButton() {
     const aaoButtons = document.querySelectorAll('.aao_btn_group');
@@ -26,8 +28,8 @@ export function placeEditButton() {
 }
 
 function addHotkeyConfigButton(group, aaoId, name, style) {
-    const hotkey = getHotkey(aaoId);
-    const hotkeyVisible = loadSetting('showHotkeys');
+    const hotkey = core.getHotkey(aaoId);
+    const hotkeyVisible = core.loadSetting('showHotkeys');
     const hotkeyText = document.createElement('span');
     if(hotkey) {
         hotkeyText.textContent = hotkey ? `[${hotkey}]` : '[none]';
@@ -48,12 +50,13 @@ function addHotkeyConfigButton(group, aaoId, name, style) {
     svgElement.style.fill = 'currentColor';
 
     configButton.setAttribute('data-aao-id', aaoId);
-    configButton.classList.add('hotkeyConfigButton','btn', 'btn-xs', 'btn-default');
+    configButton.classList.add('hotkeyConfigButton', 'hotkeyBtn', 'btn', 'btn-xs', 'btn-default');
     configButton.style.cssText = style
+    configButton.id = `hotkeyButton_${aaoId}`;
 
     //configButton.addEventListener('click', () => openHotkeyModal(aaoId, name));
     configButton.addEventListener('click', () => {
-        const modal = new ModalCore(aaoId, name);
+        const modal = new HotkeyModalCore(aaoId, name);
         modal.open();
         modal.input.focus();
     });
