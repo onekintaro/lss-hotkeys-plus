@@ -3,7 +3,7 @@
 // @namespace    http://tampermonkey.net/
 // @version      1.0
 // @description  Erlaube die Zuweisung von erweiterten Tastenkombinationen für AAO Hotkeys im Leitstellenspiel.
-// @author       Raphi
+// @author       Raphi (onekintaro)
 // @match        https://leitstellenspiel.de/*
 // @match        https://www.leitstellenspiel.de/*
 // @match        https://polizei.leitstellenspiel.de/*
